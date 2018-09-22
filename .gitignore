@@ -1,3 +1,9 @@
+# geonature
+
+config/settings.ini
+var/*
+config/conf_gn_module.toml
+
 # Byte-compiled / optimized / DLL files
 __pycache__/
 *.py[cod]
