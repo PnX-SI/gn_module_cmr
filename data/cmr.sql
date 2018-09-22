@@ -52,7 +52,14 @@ CREATE TABLE t_individuals(
     tag_code character varying(255) NOT NULL,
     tag_location character varying(255) NOT NULL,
     id_site_tag integer NOT NULL,
+    id_nomenclature_sex integer,
     comment text
+ );
+
+-- Table des individus d'un programme
+CREATE TABLE cor_individual_program(
+    id_individual integer NOT NULL,
+    id_program integer NOT NULL
  );
 
 -- Table décrivant une opération sur un individus
@@ -68,7 +75,6 @@ CREATE TABLE t_individuals(
      id_nomenclature_cmr_action integer,
      id_nomenclature_obs_method integer,
      id_nomenclature_life_stage integer,
-     id_nomenclatures_sex integer,
      id_nomenclature_bio_condition integer,
      id_nomenclature_determination_method integer,
      determiner character varying,
@@ -104,6 +110,9 @@ ALTER TABLE ONLY cor_program_attribut
 ALTER TABLE ONLY t_individuals
     ADD CONSTRAINT pk_t_individuals PRIMARY KEY (id_individual);
 
+ALTER TABLE ONLY cor_individual_program
+    ADD CONSTRAINT pk_cor_individual_program PRIMARY KEY (id_individual, id_program);
+
 ALTER TABLE ONLY t_operations
     ADD CONSTRAINT pk_t_operations PRIMARY KEY (id_operation);
 
@@ -131,6 +140,14 @@ ALTER TABLE ONLY cor_program_attribut
 ALTER TABLE ONLY t_individuals
     ADD CONSTRAINT fk_t_individuals_t_sites FOREIGN KEY (id_site_tag) REFERENCES gn_monitoring.t_base_sites(id_base_site) ON UPDATE CASCADE;
 
+ALTER TABLE ONLY t_individuals
+    ADD CONSTRAINT fk_t_individuals_sex FOREIGN KEY (id_nomenclature_sex) REFERENCES ref_nomenclatures.t_nomenclatures(id_nomenclature) ON UPDATE CASCADE;
+
+ALTER TABLE ONLY cor_individual_program
+    ADD CONSTRAINT fk_cor_individual_program_id_individual FOREIGN KEY (id_individual) REFERENCES pr_cmr.t_individuals(id_individual) ON UPDATE CASCADE;
+
+ALTER TABLE ONLY cor_individual_program
+    ADD CONSTRAINT fk_cor_individual_program_id_program FOREIGN KEY (id_program) REFERENCES pr_cmr.t_programs(id_program) ON UPDATE CASCADE;
 
 ALTER TABLE ONLY t_operations
     ADD CONSTRAINT fk_t_operations_t_sites FOREIGN KEY (id_site) REFERENCES gn_monitoring.t_base_sites(id_base_site) ON UPDATE CASCADE;
@@ -141,9 +158,6 @@ ALTER TABLE ONLY t_operations
 
 ALTER TABLE ONLY t_operations
     ADD CONSTRAINT fk_t_operations_life_stage FOREIGN KEY (id_nomenclature_life_stage) REFERENCES ref_nomenclatures.t_nomenclatures(id_nomenclature) ON UPDATE CASCADE;
-
-ALTER TABLE ONLY t_operations
-    ADD CONSTRAINT fk_t_operations_sex FOREIGN KEY (id_nomenclatures_sex) REFERENCES ref_nomenclatures.t_nomenclatures(id_nomenclature) ON UPDATE CASCADE;
 
 ALTER TABLE ONLY t_operations
     ADD CONSTRAINT fk_t_operations_bio_condition FOREIGN KEY (id_nomenclature_bio_condition) REFERENCES ref_nomenclatures.t_nomenclatures(id_nomenclature) ON UPDATE CASCADE;
@@ -162,6 +176,8 @@ ALTER TABLE ONLY cor_operation_observer
 --------------
 --CONSTRAINS--
 --------------
+ALTER TABLE t_individuals
+  ADD CONSTRAINT check_id_nomenclature_sex CHECK (ref_nomenclatures.check_nomenclature_type_by_mnemonique(id_nomenclature_sex,'SEXE')) NOT VALID;
 
 ALTER TABLE ONLY t_operations
     ADD CONSTRAINT check_t_operations_occtax_date_max CHECK (date_max >= date_min);
@@ -174,10 +190,6 @@ ALTER TABLE t_operations
 
 ALTER TABLE t_operations
   ADD CONSTRAINT check_id_nomenclature_life_stage CHECK (ref_nomenclatures.check_nomenclature_type_by_mnemonique(id_nomenclature_life_stage,'STADE_VIE')) NOT VALID;
-
-ALTER TABLE t_operations
-  ADD CONSTRAINT check_id_nomenclature_sex CHECK (ref_nomenclatures.check_nomenclature_type_by_mnemonique(id_nomenclatures_sex,'SEXE')) NOT VALID;
-
 
 ALTER TABLE t_operations
   ADD CONSTRAINT check_id_nomenclature_bio_condition CHECK (ref_nomenclatures.check_nomenclature_type_by_mnemonique(id_nomenclature_bio_condition,'ETA_BIO')) NOT VALID;

@@ -53,6 +53,8 @@ SELECT 1, 212, 'Numero 1', 'Sur le ventre', id_base_site, 'Un beau sonneur en pl
 FROM gn_monitoring.t_base_sites
 WHERE base_site_code = 'PLAINE_ROC';
 
+INSERT INTO pr_cmr.cor_individual_program(id_individual, id_program) VALUES (1,1);
+
 INSERT INTO pr_cmr.t_operations (id_operation, id_individual, id_site, date_min, date_max, determiner, comment) 
 SELECT 1, 1, id_base_site, '2017-01-01', '2017-01-01', 'Donovan Maillard', 'il pleuvait'
 FROM gn_monitoring.t_base_sites
