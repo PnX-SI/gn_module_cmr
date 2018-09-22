@@ -39,7 +39,7 @@ CREATE TABLE cor_program_attribut(
     attribut_name character varying(255) NOT NULL,
     attribut_label character varying(50) NOT NULL,
     attribut_value_list text NOT NULL,
-    mandatory boolean NOT NULL DEFAULT false,
+    required boolean NOT NULL DEFAULT false,
     attribut_desc text,
     attribut_type character varying(50),
     widget_type character varying(50)
