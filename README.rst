@@ -7,7 +7,7 @@ Désampler le fichier settings.ini et le remplir avec ses paramètres
 
 ``cp config/settings.ini.sample config/settings.ini``
 
-``nano settings.ini``
+``nano config/settings.ini``
 
 
 Se placer dans le répertoire backend de GeoNature et activer le virtualenv
