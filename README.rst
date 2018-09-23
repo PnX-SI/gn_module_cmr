@@ -4,7 +4,9 @@ Installer le module
 ------------------
 
 Désampler le fichier settings.ini et le remplir avec ses paramètres
+
 ``cp config/settings.ini.sample config/settings.ini``
+
 ``nano settings.ini``
 
 
