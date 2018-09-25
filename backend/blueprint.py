@@ -1,9 +1,10 @@
+import uuid
+
 from flask import Blueprint, request
 from geoalchemy2.shape import from_shape
 from pypnusershub import routes as fnauth
 from shapely.geometry import Point, asShape
 
-import uuid
 from geonature.utils.env import DB, get_module_id
 from geonature.utils.errors import GeonatureApiError
 from geonature.utils.utilssqlalchemy import json_resp
@@ -79,19 +80,29 @@ def get_operation(id_ope):
 @json_resp
 def post_operations(info_role):
     data = dict(request.get_json())
+
     if 'geometry' in data:
         geometry = data['geometry']
         data.pop('geometry')
+    else:
+        geometry = None
+
+    data_operations = {}
+    for field in data:
+        if hasattr(TOperations, field):
+            data_operations[field] = data[field]
+
     try:
-        id_individual = data['id_individual']
+        id_individual = data_operations['id_individual']
         try:
             ind_exists = DB.session.query(DB.exists().where(TIndividuals.id_individual == id_individual)).scalar()
         except:
             ind_exists = True
         if ind_exists:
             try:
-                newoperation = TOperations(**data)
-            except:
+                newoperation = TOperations(**data_operations)
+            except Exception as e:
+                print(e)
                 raise GeonatureApiError('Cannot create operation')
         else:
             raise GeonatureApiError("Individual doesn't exists")
@@ -100,17 +111,17 @@ def post_operations(info_role):
 
     if geometry:
         try:
-            shape = asShape(data['geometry'])
+            shape = asShape(geometry)
             newoperation.geom_point_4326 = from_shape(Point(shape), srid=4326)
         except:
-            geom = None
+            newoperation.geom_point_4326 = None
 
     newoperation.unique_id_sinp = uuid.uuid4()
 
     DB.session.add(newoperation)
     DB.session.commit()
     DB.session.flush()
-    return newoperation.as_dict()
+    return newoperation.as_geofeature('geom_point_4326', 'id_operation')
 
 
 @blueprint.route('/nomenclature_display/<int:id_nomenclature>', methods=['GET'])
@@ -123,4 +134,3 @@ def get_nomenclature_label(id_nomenclature):
         raise GeonatureApiError("Erreur id_nomenclature")
 
     return data.as_dict()
-

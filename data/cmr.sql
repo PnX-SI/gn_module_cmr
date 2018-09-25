@@ -193,3 +193,14 @@ ALTER TABLE t_operations
 
 ALTER TABLE t_operations
   ADD CONSTRAINT check_id_nomenclature_bio_condition CHECK (ref_nomenclatures.check_nomenclature_type_by_mnemonique(id_nomenclature_bio_condition,'ETA_BIO')) NOT VALID;
+
+------------
+--TRIGGERS--
+------------
+
+
+CREATE TRIGGER tri_calculate_geom_local
+  BEFORE INSERT OR UPDATE
+  ON pr_cmr.t_operations
+  FOR EACH ROW
+  EXECUTE PROCEDURE ref_geo.fct_trg_calculate_geom_local('geom_point_4326', 'geom_point_local');

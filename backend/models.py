@@ -1,7 +1,7 @@
 from geoalchemy2 import Geometry
 
 from geonature.utils.env import DB
-from geonature.utils.utilssqlalchemy import serializable
+from geonature.utils.utilssqlalchemy import serializable, geoserializable
 from flask import current_app
 from sqlalchemy.dialects.postgresql import UUID
 
@@ -21,6 +21,7 @@ class TPrograms(DB.Model):
     program_desc = DB.Column(DB.Unicode)
 
 @serializable
+@geoserializable
 class TOperations(DB.Model):
     """Table des opérations sur un individu"""
     __tablename__ = 't_operations'
