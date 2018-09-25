@@ -21,15 +21,25 @@ def get_programs():
 
 
 @blueprint.route('/individuals', methods=['GET'])
+@blueprint.route('/individuals/<id_individual>', methods=['GET'])
 @json_resp
-def get_individuals():
-    q = DB.session.query(TIndividuals, Taxonomie.nom_complet, Taxonomie.nom_vern, TNomenclatures.mnemonique).join(
-        Taxonomie, Taxonomie.cd_nom == TIndividuals.cd_nom).join(
-            TNomenclatures, TNomenclatures.id_nomenclature == TIndividuals.id_nomenclature_sex)
-    data = q.all()
-    res = []
-    for ind, nom_complet, nom_vern, sex in data:
-        d = ind.as_dict()
-        d.update({'nom_complet': nom_complet, 'nom_vern': nom_vern, 'sexe': sex})
-        res.append(d)
+def get_individuals(id_individual=None):
+    if id_individual is None:
+        q = DB.session.query(TIndividuals, Taxonomie.nom_complet, Taxonomie.nom_vern, TNomenclatures.mnemonique).join(
+            Taxonomie, Taxonomie.cd_nom == TIndividuals.cd_nom).join(
+                TNomenclatures, TNomenclatures.id_nomenclature == TIndividuals.id_nomenclature_sex)
+        data = q.all()
+        res = []
+        for ind, nom_complet, nom_vern, sex in data:
+            d = ind.as_dict()
+            d.update({'nom_complet': nom_complet, 'nom_vern': nom_vern, 'sexe': sex})
+            res.append(d)
+    else:
+        q = DB.session.query(TIndividuals, Taxonomie.nom_complet, Taxonomie.nom_vern, TNomenclatures.mnemonique).join(
+            Taxonomie, Taxonomie.cd_nom == TIndividuals.cd_nom).join(
+                TNomenclatures, TNomenclatures.id_nomenclature == TIndividuals.id_nomenclature_sex
+            ).filter(TIndividuals.id_individual == id_individual)
+        ind, nom_complet, nom_vern, sex = q.one()
+        res = ind.as_dict()
+        res.update({'nom_complet': nom_complet, 'nom_vern': nom_vern, 'sexe': sex})
     return res
