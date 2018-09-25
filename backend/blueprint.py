@@ -4,7 +4,7 @@ from pypnusershub import routes as fnauth
 from geonature.utils.env import DB, get_module_id
 from geonature.utils.errors import GeonatureApiError
 from geonature.utils.utilssqlalchemy import json_resp
-from .models import TPrograms
+from .models import TPrograms, TOperations
 
 blueprint = Blueprint('cmr', __name__)
 
@@ -48,3 +48,10 @@ def post_programs():
     DB.session.commit()
     DB.session.flush()
     return newprog.as_dict()
+
+@blueprint.route('/operations', methods=['GET'])
+@json_resp
+def get_operations():
+    operations = DB.session.query(TOperations).all()
+    result = [ope.as_dict() for ope in operations]
+    return result
