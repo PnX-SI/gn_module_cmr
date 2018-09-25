@@ -10,10 +10,16 @@ from shapely.geometry import Point, asShape
 from geonature.utils.errors import GeonatureApiError
 from geonature.utils.env import DB, get_module_id
 from geonature.utils.utilssqlalchemy import json_resp
+<<<<<<< HEAD
 from .models import TPrograms, TOperations, TIndividuals, Taxonomie
 
 from pypnnomenclature.models import TNomenclatures
 
+=======
+from geonature.core.gn_monitoring.models import TBaseSites
+from .models import TPrograms, CorSiteProgram
+from geojson import FeatureCollection
+>>>>>>> sites
 
 blueprint = Blueprint('cmr', __name__)
 
@@ -180,3 +186,15 @@ def get_individuals(id_individual=None):
         res = ind.as_dict()
         res.update({'nom_complet': nom_complet, 'nom_vern': nom_vern, 'sexe': sex})
     return res
+
+    
+@blueprint.route('/sites/<int:id_program>', methods=['GET'])
+@json_resp
+def get_sites(id_program):
+    q = DB.session.query(TBaseSites)
+    q = q.join(CorSiteProgram, CorSiteProgram.id_site==TBaseSites.id_base_site)
+    sites = q.filter(CorSiteProgram.id_program == id_program).all()
+    features = []
+    for site in sites:
+        features.append(site.get_geofeature(recursif=False))
+    return FeatureCollection(features)

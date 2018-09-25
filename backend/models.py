@@ -85,3 +85,10 @@ class Taxonomie(DB.Model):
     )
     nom_complet = DB.Column(DB.Unicode)
     nom_vern = DB.Column(DB.Unicode)
+
+    
+class CorSiteProgram(DB.Model):
+    __tablename__ = 'cor_site_program'
+    __table_args__ = {'schema': 'pr_cmr'}
+    id_program = DB.Column(DB.Integer, primary_key=True)
+    id_site = DB.Column(DB.Integer, primary_key=True)
