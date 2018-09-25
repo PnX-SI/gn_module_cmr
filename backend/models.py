@@ -1,5 +1,5 @@
+from geonature.utils.utilssqlalchemy import serializable
 from geoalchemy2 import Geometry
-
 from geonature.utils.env import DB
 from geonature.utils.utilssqlalchemy import serializable
 from flask import current_app
@@ -7,6 +7,7 @@ from sqlalchemy.dialects.postgresql import UUID
 
 
 local_srid = current_app.config['LOCAL_SRID']
+
 
 @serializable
 class TPrograms(DB.Model):
@@ -19,6 +20,28 @@ class TPrograms(DB.Model):
     )
     program_name = DB.Column(DB.Unicode)
     program_desc = DB.Column(DB.Unicode)
+
+
+@serializable
+class TIndividuals(DB.Model):
+    __tablename__ = 't_individuals'
+    __table_args__ = {'schema': 'pr_cmr'}
+    id_individual = DB.Column(
+        DB.Integer,
+        primary_key=True,
+    )
+    cd_nom = DB.Column(DB.Integer)
+    tag_code = DB.Column(DB.Unicode)
+    tag_location = DB.Column(DB.Unicode)
+    id_site_tag = DB.Column(
+        DB.Integer,
+        DB.ForeignKey('gn_monitoring.t_base_sites.id_base_site')
+    )
+    id_nomenclature_sex = DB.Column(
+        DB.Integer,
+        DB.ForeignKey('ref_nomenclatures.t_nomenclatures.id_nomenclature')
+    )
+
 
 @serializable
 class TOperations(DB.Model):
@@ -46,23 +69,3 @@ class TOperations(DB.Model):
     id_nomenclature_determination_method = DB.Column(DB.Integer)
     determiner = DB.Column(DB.Unicode)
     unique_id_sinp = DB.Column(UUID(as_uuid=True), nullable=False)
-
-@serializable
-class TIndividuals(DB.Model):
-    __tablename__ = 't_individuals'
-    __table_args__ = {'schema': 'pr_cmr'}
-    id_individual = DB.Column(
-        DB.Integer,
-        primary_key=True,
-    )
-    cd_nom = DB.Column(DB.Integer)
-    tag_code = DB.Column(DB.Unicode)
-    tag_location = DB.Column(DB.Unicode)
-    id_site_tag = DB.Column(
-        DB.Integer,
-        ForeignKey('gn_monitoring.t_base_sites.id_base_site')
-    )
-    id_nomenclature_sex = DB.Column(
-        DB.Integer,
-        ForeignKey('ref_nomenclatures.t_nomenclatures.id_nomenclature')
-    )

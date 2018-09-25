@@ -5,7 +5,7 @@ import { AppConfig } from '@geonature_config/app.config';
 
 @Component({
   selector: "pnx-cmr-individuals",
-  templateUrl: "form_individuals.component.html"
+  templateUrl: "form-individuals.component.html"
 })
 export class IndividualsComponent implements OnInit {
   public individuals: Array<any>;
