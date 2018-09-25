@@ -2,6 +2,8 @@ import uuid
 
 from flask import Blueprint, request
 from geoalchemy2.shape import from_shape
+from geojson import FeatureCollection
+from pypnnomenclature.models import TNomenclatures
 from pypnusershub import routes as fnauth
 from shapely.geometry import Point, asShape
 
@@ -9,11 +11,6 @@ from geonature.utils.env import DB, get_module_id
 from geonature.utils.errors import GeonatureApiError
 from geonature.utils.utilssqlalchemy import json_resp
 from .models import TPrograms, TOperations
-from geojson import FeatureCollection
-
-from pypnnomenclature.models import TNomenclatures
-
-
 
 blueprint = Blueprint('cmr', __name__)
 
@@ -122,21 +119,15 @@ def post_operations(info_role):
     DB.session.add(newoperation)
     DB.session.commit()
     DB.session.flush()
-<<<<<<< HEAD
 
     return newoperation.get_geofeature()
-=======
-    return newoperation.as_geofeature('geom_point_4326', 'id_operation')
 
 
 @blueprint.route('/nomenclature_display/<int:id_nomenclature>', methods=['GET'])
 @json_resp
 def get_nomenclature_label(id_nomenclature):
-
     try:
         data = DB.session.query(TNomenclatures).filter(TNomenclatures.id_nomenclature == id_nomenclature).first()
     except:
         raise GeonatureApiError("Erreur id_nomenclature")
-
     return data.as_dict()
->>>>>>> 01c5377557b8cd5629691d48b2160d86c1296288
