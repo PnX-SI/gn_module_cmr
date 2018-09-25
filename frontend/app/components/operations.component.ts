@@ -29,11 +29,14 @@ export class OperationsComponent implements OnInit {
 
     this._api.get<any>(`${AppConfig.API_ENDPOINT}/cmr/operations`)
     .subscribe(data => {
-      this.operations = data;
+
+      console.log("data");
+      // this.operations = data["features"];
+      this.operations = data.features;
         // this.operationsForm.patchValue(this.operations[0])
         console.log(data);
       })
 
-    console.log(this.operationsForm);
+    // console.log(this.operationsForm);
   }
 }

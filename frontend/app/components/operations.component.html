@@ -6,35 +6,35 @@
 
 		<ul>
 
-			<li> Id opération : {{operation.id_operation}} </li>
+			<li> Id opération : {{operation.properties.id_operation}} </li>
 
-			<li *ngIf="operation.id_nomenclature_cmr_action">
+			<li *ngIf="operation.properties.id_nomenclature_cmr_action">
 				Action : <pnx-cmr-nomenclature-display
-				[id_nomenclature]="operation.id_nomenclature_cmr_action" >
+				[id_nomenclature]="operation.properties.id_nomenclature_cmr_action" >
 			</pnx-cmr-nomenclature-display>
 			</li>
 
-			<li *ngIf="operation.id_nomenclature_obs_method">
+			<li *ngIf="operation.properties.id_nomenclature_obs_method">
 				Méthode : <pnx-cmr-nomenclature-display
-				[id_nomenclature]="operation.id_nomenclature_obs_method" >
+				[id_nomenclature]="operation.properties.id_nomenclature_obs_method" >
 			</pnx-cmr-nomenclature-display>
 			</li>
 
-			<li *ngIf="operation.id_nomenclature_life_stage">
+			<li *ngIf="operation.properties.id_nomenclature_life_stage">
 				Stade de vie : <pnx-cmr-nomenclature-display
-				[id_nomenclature]="operation.id_nomenclature_life_stage" >
+				[id_nomenclature]="operation.properties.id_nomenclature_life_stage" >
 			</pnx-cmr-nomenclature-display>
 			</li>
 
-			<li *ngIf="operation.id_nomenclature_bio_condition">
+			<li *ngIf="operation.properties.id_nomenclature_bio_condition">
 				Etat biologique : <pnx-cmr-nomenclature-display
-				[id_nomenclature]="operation.id_nomenclature_bio_condition" >
+				[id_nomenclature]="operation.properties.id_nomenclature_bio_condition" >
 			</pnx-cmr-nomenclature-display>
 			</li>
 
-			<li *ngIf="operation.id_nomenclature_determination_method">
+			<li *ngIf="operation.properties.id_nomenclature_determination_method">
 				Détermination : <pnx-cmr-nomenclature-display
-				[id_nomenclature]="operation.id_nomenclature_determination_method" >
+				[id_nomenclature]="operation.properties.id_nomenclature_determination_method" >
 			</pnx-cmr-nomenclature-display>
 			</li>
 
@@ -45,6 +45,7 @@
 </ul>
 
 <div>
+
 	<h3>Ajout d'une nouvelle opération</h3>
 
 	<pnx-nomenclature label="Action"
@@ -80,7 +81,7 @@
  -->
 </div>
 
-<!-- {{ operationsForm.value | json }} -->
+{{ operationsForm.value | json }}
 
 
 <!-- 		<pnx-nomenclature label="Action"
