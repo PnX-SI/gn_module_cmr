@@ -47,3 +47,6 @@ class TOperations(DB.Model):
     id_nomenclature_determination_method = DB.Column(DB.Integer)
     determiner = DB.Column(DB.Unicode)
     unique_id_sinp = DB.Column(UUID(as_uuid=True))
+
+    def get_geofeature(self, recursif=True, columns=None):
+        return self.as_geofeature('geom_point_4326', 'id_operation', recursif, columns=columns)
