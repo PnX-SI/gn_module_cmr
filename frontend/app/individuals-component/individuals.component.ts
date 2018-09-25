@@ -23,6 +23,6 @@ export class IndividualsComponent implements OnInit {
   }
 
   onInfo(id_individual) {
-    this._router.navigate([`cmr/individuals`, id_individual]);
-}
+    this._router.navigate([`cmr/operations`]);
+  }
 }

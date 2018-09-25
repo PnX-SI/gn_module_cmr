@@ -1,5 +1,5 @@
+from geonature.utils.utilssqlalchemy import serializable
 from geoalchemy2 import Geometry
-
 from geonature.utils.env import DB
 from geonature.utils.utilssqlalchemy import serializable, geoserializable
 from flask import current_app
@@ -7,6 +7,7 @@ from sqlalchemy.dialects.postgresql import UUID
 from sqlalchemy import ForeignKey
 
 local_srid = current_app.config['LOCAL_SRID']
+
 
 @serializable
 class TPrograms(DB.Model):
@@ -46,7 +47,7 @@ class TOperations(DB.Model):
     id_nomenclature_bio_condition = DB.Column(DB.Integer)
     id_nomenclature_determination_method = DB.Column(DB.Integer)
     determiner = DB.Column(DB.Unicode)
-    unique_id_sinp = DB.Column(UUID(as_uuid=True))
+    unique_id_sinp = DB.Column(UUID(as_uuid=True), nullable=False)
 	
     def get_geofeature(self, recursif=True, columns=None):
         return self.as_geofeature('geom_point_4326', 'id_operation', recursif, columns=columns)

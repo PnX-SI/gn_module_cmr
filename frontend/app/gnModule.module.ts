@@ -7,6 +7,8 @@ import { ProgramsFormComponent } from "./components/programs.form.component";
 import { OperationsComponent } from "./components/operations.component";
 import { NomenclatureDisplayComponent } from "./utils/nomenclature_display.component";
 import { IndividualsComponent } from "./individuals-component/individuals.component";
+import { IndividualsFormComponent } from "./components/form-individuals.component";
+import { IndividualsService } from "./services/individuals.service";
 
 // my module routing
 const routes: Routes = [
@@ -15,17 +17,18 @@ const routes: Routes = [
   { path: 'form_pg/:id', component: ProgramsFormComponent },
   { path: "operations", component: OperationsComponent },
   // { path: "nomenclatures_display/:id_nomenclature", component: NomenclatureDisplayComponent },
-  { path: "individuals", component: IndividualsComponent }
+  { path: "individuals", component: IndividualsComponent },
+  { path: "formIndividuals", component: IndividualsFormComponent }
 ];
 
 @NgModule({
   declarations: [
     ProgramsListComponent, ProgramsFormComponent,
     OperationsComponent, NomenclatureDisplayComponent,
-    IndividualsComponent
+    IndividualsComponent, IndividualsFormComponent
   ],
   imports: [GN2CommonModule, RouterModule.forChild(routes), CommonModule],
-  providers: [],
+  providers: [IndividualsService],
   bootstrap: []
 })
 export class GeonatureModule { }
