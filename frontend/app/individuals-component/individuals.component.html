@@ -2,7 +2,13 @@
     <table class="table">
         <thead>
             <tr>
-                <th>Code</th><th>Noms vernaculaires</th><th>Nom scientifique</th><th>Placement du marqueur</th><th>Site</th><th>Sexe</th>
+                <th>Code</th>
+                <th>Noms vernaculaires</th>
+                <th>Nom scientifique</th>
+                <th>Placement du marqueur</th>
+                <th>Site</th>
+                <th>Sexe</th>
+                <th></th>
             </tr>
         </thead>
         <tbody>
@@ -13,6 +19,7 @@
                 <td>{{individual.location}}</td>
                 <td>{{individual.id_site_tag}}</td>
                 <td>{{individual.sexe}}</td>
+                <td> <button type="button" (click)="onInfo(individual.id_individual)"> Détails </button> </td>
             </tr>
         </tbody>
     </table>
