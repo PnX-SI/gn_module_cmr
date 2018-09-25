@@ -1,0 +1,15 @@
+<h3>Sites</h3>
+
+
+<div class="row row-0">
+    <div class="col-sm-12 col-md-7 padding-sm map-content">
+
+        <pnx-map height="90vh">
+ <pnx-geojson [geojson]="sites"> </pnx-geojson>
+        </pnx-map>
+
+      </div>
+
+<ul *ngFor="let site of sites">
+    <li>{{site.properties.base_site_name}}</li>
+</ul>
