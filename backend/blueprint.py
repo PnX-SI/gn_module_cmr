@@ -9,6 +9,10 @@ from geonature.utils.errors import GeonatureApiError
 from geonature.utils.utilssqlalchemy import json_resp
 from .models import TPrograms, TOperations
 
+from pypnnomenclature.models import TNomenclatures
+
+
+
 blueprint = Blueprint('cmr', __name__)
 
 try:
@@ -107,3 +111,16 @@ def post_operations(info_role):
     DB.session.commit()
     DB.session.flush()
     return newoperation.as_dict()
+
+
+@blueprint.route('/nomenclature_display/<int:id_nomenclature>', methods=['GET'])
+@json_resp
+def get_nomenclature_label(id_nomenclature):
+
+    try:
+        data = DB.session.query(TNomenclatures).filter(TNomenclatures.id_nomenclature == id_nomenclature).first()
+    except:
+        raise GeonatureApiError("Erreur id_nomenclature")
+
+    return data.as_dict()
+
