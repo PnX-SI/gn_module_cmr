@@ -24,7 +24,7 @@ const routes: Routes = [
   declarations: [
     ProgramsListComponent, ProgramsFormComponent,
     OperationsComponent, NomenclatureDisplayComponent,
-    IndividualsComponent
+    IndividualsComponent, SitesComponent
   ],
   imports: [GN2CommonModule, RouterModule.forChild(routes), CommonModule],
   providers: [],
