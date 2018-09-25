@@ -184,6 +184,21 @@ def get_individuals(id_individual=None):
         res.update({'nom_complet': nom_complet, 'nom_vern': nom_vern, 'sexe': sex})
     return res
 
+@blueprint.route('sites/<id_site>/individuals', methods=['GET'])
+@json_resp
+def get_site_individuals(id_site):
+    q = DB.session.query(TIndividuals, Taxonomie.nom_complet, Taxonomie.nom_vern, TNomenclatures.mnemonique).join(
+        Taxonomie, Taxonomie.cd_nom == TIndividuals.cd_nom).join(
+            TNomenclatures, TNomenclatures.id_nomenclature == TIndividuals.id_nomenclature_sex
+        ).filter(TIndividuals.id_site_tag == id_site)
+    data = q.all()
+    res = []
+    for ind, nom_complet, nom_vern, sex in data:
+        d = ind.as_dict()
+        d.update({'nom_complet': nom_complet, 'nom_vern': nom_vern, 'sexe': sex})
+        res.append(d)
+    return res
+
     
 @blueprint.route('/sites/<int:id_program>', methods=['GET'])
 @json_resp

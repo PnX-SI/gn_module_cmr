@@ -10,6 +10,7 @@ import { IndividualsComponent } from "./individuals-component/individuals.compon
 import { SitesComponent } from "./components/sites.component";
 import { IndividualsFormComponent } from "./components/form-individuals.component";
 import { IndividualsService } from "./services/individuals.service";
+import { SiteIndividualsComponent } from "./site-individuals-component/site-individuals.component"
 
 // my module routing
 const routes: Routes = [
@@ -20,14 +21,16 @@ const routes: Routes = [
   // { path: "nomenclatures_display/:id_nomenclature", component: NomenclatureDisplayComponent },
   { path: "individuals", component: IndividualsComponent },
   { path: "sites/:id_program", component: SitesComponent },
-  { path: "formIndividuals", component: IndividualsFormComponent }
+  { path: "formIndividuals", component: IndividualsFormComponent },
+  { path: "sites/:id_site/individuals", component: SiteIndividualsComponent },
+
 ];
 
 @NgModule({
   declarations: [
     ProgramsListComponent, ProgramsFormComponent,
     OperationsComponent, NomenclatureDisplayComponent,
-    IndividualsComponent, SitesComponent, IndividualsFormComponent
+    IndividualsComponent, SitesComponent, IndividualsFormComponent, SiteIndividualsComponent
   ],
   imports: [GN2CommonModule, RouterModule.forChild(routes), CommonModule],
   providers: [IndividualsService],
