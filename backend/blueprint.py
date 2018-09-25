@@ -83,11 +83,6 @@ def post_operations(info_role):
     else:
         geometry = None
 
-    data_operations = dict(data)
-    for k in data:
-        if not getattr(TOperations, k, None):
-            data_operations.pop(k)
-
     data_operations = {}
     for field in data:
         if hasattr(TOperations, field):
