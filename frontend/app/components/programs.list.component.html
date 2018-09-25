@@ -1,0 +1,15 @@
+<h3> Liste des programes </h3>
+
+<table>
+    <tr *ngFor="let program of programs">
+        <td> {{program.program_name}} </td>
+        <td> {{program.program_desc}} </td>
+        <td class="clickable" (click)="pgEdit(program.id_program)">
+            <i class="fa fa-pencil-square-o"
+            aria-hidden="true"></i>
+            Editer 
+        </td>
+    </tr>
+</table>
+
+<button (click)="onAddProgram()">Ajouter</button>

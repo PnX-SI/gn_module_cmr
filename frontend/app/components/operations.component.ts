@@ -31,12 +31,9 @@ export class OperationsComponent implements OnInit {
     .subscribe(data => {
 
       console.log("data");
-      // this.operations = data["features"];
       this.operations = data.features;
-        // this.operationsForm.patchValue(this.operations[0])
-        console.log(data);
+
       })
 
-    // console.log(this.operationsForm);
   }
 }

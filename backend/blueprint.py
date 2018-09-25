@@ -3,14 +3,17 @@ import uuid
 from flask import Blueprint, request
 from geoalchemy2.shape import from_shape
 from geojson import FeatureCollection
-from pypnnomenclature.models import TNomenclatures
 from pypnusershub import routes as fnauth
 from shapely.geometry import Point, asShape
 
-from geonature.utils.env import DB, get_module_id
+
 from geonature.utils.errors import GeonatureApiError
+from geonature.utils.env import DB, get_module_id
 from geonature.utils.utilssqlalchemy import json_resp
-from .models import TPrograms, TOperations
+from .models import TPrograms, TOperations, TIndividuals, Taxonomie
+
+from pypnnomenclature.models import TNomenclatures
+
 
 blueprint = Blueprint('cmr', __name__)
 
@@ -24,37 +27,56 @@ except Exception as e:
 def test():
     return 'It works'
 
-
 @blueprint.route('/programs', methods=['GET'])
+@fnauth.check_auth_cruved('R', False, id_app=ID_MODULE)
 @json_resp
 def get_programs():
     pgs = DB.session.query(TPrograms).all()
     return [pg.as_dict() for pg in pgs]
 
+@blueprint.route('/programs/<int:id_program>', methods=['GET'])
+@fnauth.check_auth_cruved('R', False, id_app=ID_MODULE)
+@json_resp
+def get_program_by_id(id_program):
+    pg = (DB.session.query(TPrograms)
+        .filter(TPrograms.id_program == id_program)
+        .one()
+    )
+    return pg.as_dict()
 
 @blueprint.route('/programs', methods=['POST'])
+@blueprint.route('/programs/<int:id_program>', methods=['POST'])
 @fnauth.check_auth_cruved('C', False, id_app=ID_MODULE)
 @json_resp
-def post_programs():
-    """ Ajout d'un programme (program name unique)"""
+def post_programs(id_program = None):
+    """ 
+        Ajout d'un programme (program name unique)
+    """
     data = dict(request.get_json())
-    progname = data['program_name']
-    if len(progname) >= 1:
-        exists = DB.session.query(DB.exists().where(TPrograms.program_name == progname)).scalar()
-        if exists:
-            raise GeonatureApiError('This program already exists')
-        else:
-            try:
-                newprog = TPrograms(**data)
-            except:
-                raise GeonatureApiError('Cannot create program')
-    else:
-        raise GeonatureApiError('Program name empty')
+    program = data['program_name']
+    
+    newpg = TPrograms(**data)
 
-    DB.session.add(newprog)
-    DB.session.commit()
-    DB.session.flush()
-    return newprog.as_dict()
+    exists = (
+        DB.session.query(TPrograms)
+        .filter(TPrograms.program_name == program)
+        .all()
+    )
+    if exists:
+        if not exists[0].id_program == id_program :
+            raise GeonatureApiError('This program already exists')
+
+    if newpg.id_program:
+        DB.session.merge(newpg)
+    else:
+        DB.session.add(newpg)
+
+    try:
+        DB.session.commit()
+    except:
+        raise GeonatureApiError('Cannot create program')
+    
+    return newpg.as_dict(True)
 
 
 @blueprint.route('/operations', methods=['GET'])
@@ -126,8 +148,35 @@ def post_operations(info_role):
 @blueprint.route('/nomenclature_display/<int:id_nomenclature>', methods=['GET'])
 @json_resp
 def get_nomenclature_label(id_nomenclature):
+
     try:
         data = DB.session.query(TNomenclatures).filter(TNomenclatures.id_nomenclature == id_nomenclature).first()
     except:
         raise GeonatureApiError("Erreur id_nomenclature")
+
     return data.as_dict()
+
+
+@blueprint.route('/individuals', methods=['GET'])
+@blueprint.route('/individuals/<id_individual>', methods=['GET'])
+@json_resp
+def get_individuals(id_individual=None):
+    if id_individual is None:
+        q = DB.session.query(TIndividuals, Taxonomie.nom_complet, Taxonomie.nom_vern, TNomenclatures.mnemonique).join(
+            Taxonomie, Taxonomie.cd_nom == TIndividuals.cd_nom).join(
+                TNomenclatures, TNomenclatures.id_nomenclature == TIndividuals.id_nomenclature_sex)
+        data = q.all()
+        res = []
+        for ind, nom_complet, nom_vern, sex in data:
+            d = ind.as_dict()
+            d.update({'nom_complet': nom_complet, 'nom_vern': nom_vern, 'sexe': sex})
+            res.append(d)
+    else:
+        q = DB.session.query(TIndividuals, Taxonomie.nom_complet, Taxonomie.nom_vern, TNomenclatures.mnemonique).join(
+            Taxonomie, Taxonomie.cd_nom == TIndividuals.cd_nom).join(
+                TNomenclatures, TNomenclatures.id_nomenclature == TIndividuals.id_nomenclature_sex
+            ).filter(TIndividuals.id_individual == id_individual)
+        ind, nom_complet, nom_vern, sex = q.one()
+        res = ind.as_dict()
+        res.update({'nom_complet': nom_complet, 'nom_vern': nom_vern, 'sexe': sex})
+    return res
