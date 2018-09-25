@@ -7,14 +7,14 @@ import { AppConfig } from '@geonature_config/app.config';
   selector: "pnx-cmr-individuals",
   templateUrl: "form_individuals.component.html"
 })
-export class OperationsComponent implements OnInit {
+export class IndividualsComponent implements OnInit {
   public individuals: Array<any>;
   constructor(private _api: HttpClient) { }
 
   ngOnInit() {
-    this._api.get<any>(`${AppConfig.API_ENDPOINT}/cmr/operations`)
+    this._api.get<any>(`${AppConfig.API_ENDPOINT}/cmr/individuals`)
       .subscribe(data => {
-        this.operations = data;
+        this.individuals = data;
         console.log(data);
       })
 
