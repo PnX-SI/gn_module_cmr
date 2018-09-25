@@ -33,7 +33,3 @@ def get_individuals():
         d.update({'nom_complet': nom_complet, 'nom_vern': nom_vern, 'sexe': sex})
         res.append(d)
     return res
-
-    
-    
-    # return [d.as_dict() for d in data]
