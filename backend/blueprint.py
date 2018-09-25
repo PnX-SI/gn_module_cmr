@@ -1,4 +1,4 @@
-from flask import Blueprint
+from flask import Blueprint, request
 
 from geonature.utils.env import DB
 from geonature.utils.utilssqlalchemy import json_resp
@@ -43,3 +43,11 @@ def get_individuals(id_individual=None):
         res = ind.as_dict()
         res.update({'nom_complet': nom_complet, 'nom_vern': nom_vern, 'sexe': sex})
     return res
+
+@blueprint.route('/individuals', methods=['POST'])
+@json_resp
+def create_individual():
+    ind = TIndividuals(**request.get_json())
+    DB.session.add(ind)
+    DB.session.commit()
+    return ind.ad_dict()
