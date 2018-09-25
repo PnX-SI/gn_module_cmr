@@ -103,11 +103,13 @@ def get_operation(id_ope):
 def post_operations(info_role):
     data = dict(request.get_json())
 
-    if 'geometry' in data:
-        geometry = data['geometry']
-        data.pop('geometry')
-    else:
-        geometry = None
+    print(data)
+
+    if 'geom_point_4326' in data:
+
+        shape = asShape(data['geom_point_4326']['geometry'])
+        print(shape)
+        data['geom_point_4326'] = from_shape(Point(shape), srid=4326)
 
     data_operations = {}
     for field in data:
@@ -131,12 +133,6 @@ def post_operations(info_role):
     except:
         raise GeonatureApiError("id_individual missing")
 
-    if geometry:
-        try:
-            shape = asShape(geometry)
-            newoperation.geom_point_4326 = from_shape(Point(shape), srid=4326)
-        except:
-            newoperation.geom_point_4326 = None
 
     newoperation.unique_id_sinp = uuid.uuid4()
 

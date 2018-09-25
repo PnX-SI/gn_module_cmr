@@ -75,8 +75,6 @@ export class OperationsComponent implements OnInit {
 
     let post_url = AppConfig.API_ENDPOINT + '/cmr/operations';
 
-    // op.date_min = new Date("2016-01-16T16:00:00");
-    // op.date_max = new Date("2016-01-16T16:00:00");
     op.date_max = this._dateParser.format(op.date_max);
     op.date_min = this._dateParser.format(op.date_min);
 
