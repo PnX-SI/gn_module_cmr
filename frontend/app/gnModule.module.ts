@@ -14,14 +14,15 @@ const routes: Routes = [
   { path: "form_pg", component: ProgramsFormComponent },
   { path: 'form_pg/:id', component: ProgramsFormComponent },
   { path: "operations", component: OperationsComponent },
-  { path: "nomenclatures_display/:id_nomenclature", component: NomenclatureDisplayComponent },
-  {path: "individuals", component: IndividualsComponent}
+  // { path: "nomenclatures_display/:id_nomenclature", component: NomenclatureDisplayComponent },
+  { path: "individuals", component: IndividualsComponent }
 ];
 
 @NgModule({
   declarations: [
     ProgramsListComponent, ProgramsFormComponent,
-    OperationsComponent, NomenclatureDisplayComponent
+    OperationsComponent, NomenclatureDisplayComponent,
+    IndividualsComponent
   ],
   imports: [GN2CommonModule, RouterModule.forChild(routes), CommonModule],
   providers: [],
