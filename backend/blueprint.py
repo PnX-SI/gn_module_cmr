@@ -1,12 +1,13 @@
 from flask import Blueprint, request
+from geoalchemy2.shape import from_shape
 from pypnusershub import routes as fnauth
+from shapely.geometry import Point, asShape
 
+import uuid
 from geonature.utils.env import DB, get_module_id
 from geonature.utils.errors import GeonatureApiError
 from geonature.utils.utilssqlalchemy import json_resp
 from .models import TPrograms, TOperations
-from geoalchemy2.shape import from_shape
-from shapely.geometry import Point, asShape
 
 blueprint = Blueprint('cmr', __name__)
 
@@ -60,13 +61,13 @@ def get_operations():
     result = [ope.as_dict() for ope in operations]
     return result
 
+
 @blueprint.route('/operations/<int:id_ope>', methods=['GET'])
 @json_resp
 def get_operation(id_ope):
     operation = TOperations.query.get(id_ope)
     result = operation.as_dict()
     return result
-
 
 
 @blueprint.route('/operations', methods=['POST'])
@@ -77,7 +78,6 @@ def post_operations(info_role):
     if 'geometry' in data:
         geometry = data['geometry']
         data.pop('geometry')
-
     try:
         id_individual = data['id_individual']
         try:
@@ -100,6 +100,8 @@ def post_operations(info_role):
             newoperation.geom_point_4326 = from_shape(Point(shape), srid=4326)
         except:
             geom = None
+
+    newoperation.unique_id_sinp = uuid.uuid4()
 
     DB.session.add(newoperation)
     DB.session.commit()
