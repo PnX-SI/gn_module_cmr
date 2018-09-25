@@ -7,20 +7,19 @@ export class IndividualsService {
   constructor(private _api: HttpClient) {}
 
   getAllIndividuals() {
-    console.log('get all individuals.')
-    return this._api.get<any>(`${AppConfig.API_ENDPOINT}/individuals`);
+    return this._api.get<any>(`${AppConfig.API_ENDPOINT}/cmr/individuals`);
   }
 
   getOneIndividual(id) {
-    return this._api.get<any>(`${AppConfig.API_ENDPOINT}/individuals/${id}`);
+    return this._api.get<any>(`${AppConfig.API_ENDPOINT}/cmr/individuals/${id}`);
   }
 
   deleteIndividual(id) {
-    return this._api.delete(`${AppConfig.API_ENDPOINT}/individuals/${id}`);
+    return this._api.delete(`${AppConfig.API_ENDPOINT}/cmr/individuals/${id}`);
   }
 
   postIndividuals(form) {
-    return this._api.post(`${AppConfig.API_ENDPOINT}/individuals`, form);
+    return this._api.post(`${AppConfig.API_ENDPOINT}/cmr/individuals`, form);
   }
 
 }
