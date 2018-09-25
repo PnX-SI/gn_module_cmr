@@ -1,6 +1,7 @@
 <h3> Liste des opérations </h3>
 
-<ul *ngFor="let operation of operations?.features">
+
+<ul *ngFor="let operation of operations">
 
 	<li>
 
@@ -54,38 +55,66 @@
 		>
 	</pnx-nomenclature>
 
-<pnx-nomenclature label="Méthode d'observation"
-		[parentFormControl]="operationsForm.controls.id_nomenclature_obs_method"
-		codeNomenclatureType="METH_OBS"
-		>
+	<pnx-nomenclature label="Méthode d'observation"
+			[parentFormControl]="operationsForm.controls.id_nomenclature_obs_method"
+			codeNomenclatureType="METH_OBS"
+			>
 	</pnx-nomenclature>
 
- <pnx-nomenclature label="Stade de vie"
-		[parentFormControl]="operationsForm.controls.id_nomenclature_life_stage"
-		codeNomenclatureType="STADE_VIE"
-		>
+	 <pnx-nomenclature label="Stade de vie"
+			[parentFormControl]="operationsForm.controls.id_nomenclature_life_stage"
+			codeNomenclatureType="STADE_VIE"
+			>
 	</pnx-nomenclature>
 
-<pnx-nomenclature label="État biolgique"
-		[parentFormControl]="operationsForm.controls.id_nomenclature_bio_condition"
-		codeNomenclatureType="ETA_BIO"
-		>
+	<pnx-nomenclature label="État biolgique"
+			[parentFormControl]="operationsForm.controls.id_nomenclature_bio_condition"
+			codeNomenclatureType="ETA_BIO"
+			>
 	</pnx-nomenclature>
 
-<pnx-nomenclature label="Méthode de détermination"
+	<pnx-nomenclature label="Méthode de détermination"
 		[parentFormControl]="operationsForm.controls.id_nomenclature_determination_method"
 		codeNomenclatureType="METH_DETERMIN"
 		>
 	</pnx-nomenclature>
-<!--
- -->
+
+	<input 
+		type="text" 
+		id="id_individual" 
+		name="id_individual" 
+		[formControl]="operationsForm.controls.id_individual"
+		>
+
+	<pnx-date
+		[parentFormControl]="operationsForm.controls.date_min"
+	></pnx-date>
+
+	<pnx-date
+		[parentFormControl]="operationsForm.controls.date_max"
+	></pnx-date>
+
+	<input 
+		type="text" 
+		id="id_site" 
+		name="id_site" 
+		[formControl]="operationsForm.controls.id_site"
+		>
+
+	<pnx-map
+		height='90vh'
+	>
+		<pnx-marker
+		(markerChanged)="setGeom($event)">
+		</pnx-marker>
+	</pnx-map>
+
+
+	<button
+		[disabled]="operationsForm.invalid"
+		(click)="postOp()">Envoyer
+	</button>
+
 </div>
 
 {{ operationsForm.value | json }}
-
-
-<!-- 		<pnx-nomenclature label="Action"
-		[parentFormControl]="operationsForm.controls.id_nomenclature_cmr_action"
-		codeNomenclatureType="CMR_ACTION"
-		>
-	</pnx-nomenclature> -->

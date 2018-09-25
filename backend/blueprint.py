@@ -183,13 +183,14 @@ def get_individuals(id_individual=None):
         res.update({'nom_complet': nom_complet, 'nom_vern': nom_vern, 'sexe': sex})
     return res
 
-@blueprint.route('/individuals/operations/<int:id_indiv>', methods=['GET'])
+
+@blueprint.route('/site/<int:id_site>/individual/<int:id_indiv>/operations', methods=['GET'])
 @json_resp
-def get_operations_by_individual(id_indiv):
+def get_operations_by_individual(id_site, id_indiv):
     """Récupération de toutes les opérations réalisées sur un individu"""
     try:
-        datas = TOperations.query.filter(TOperations.id_individual == id_indiv).all()
+        datas = TOperations.query.filter(TOperations.id_individual == id_indiv).filter(TOperations.id_site == id_site).all()
         operations = FeatureCollection([ope.get_geofeature() for ope in datas])
         return operations
     except Exception as e:
-        raise GeonatureApiError(e)
+        raise GeonatureApiError(str(e))

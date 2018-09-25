@@ -13,8 +13,7 @@ const routes: Routes = [
   { path: "", component: ProgramsListComponent },
   { path: "form_pg", component: ProgramsFormComponent },
   { path: 'form_pg/:id', component: ProgramsFormComponent },
-  { path: "operations", component: OperationsComponent },
-  // { path: "nomenclatures_display/:id_nomenclature", component: NomenclatureDisplayComponent },
+  { path: "site/:id_site/individual/:id_indiv/operations", component: OperationsComponent },
   { path: "individuals", component: IndividualsComponent }
 ];
 
