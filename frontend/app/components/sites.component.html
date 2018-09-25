@@ -5,11 +5,13 @@
     <div class="col-sm-12 col-md-7 padding-sm map-content">
 
         <pnx-map height="90vh">
- <pnx-geojson [geojson]="sites"> </pnx-geojson>
+ <pnx-geojson [geojson]="sites" [onEachFeature]="onEachFeature.bind(this)"> </pnx-geojson>
         </pnx-map>
 
       </div>
 
-<ul *ngFor="let site of sites">
-    <li>{{site.properties.base_site_name}}</li>
+<ul *ngFor="let site of sites"  
+(click)="mapListService.onRowSelect(site.properties.id_base_site)">
+    <li [ngClass]="{'row_red' : site.properties.id_base_site == id_site}" >
+        {{site.properties.id_base_site}} {{site.properties.base_site_name}}</li>
 </ul>
