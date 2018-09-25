@@ -1,19 +1,86 @@
-<h3> It works !</h3>
+<h3> Liste des opérations </h3>
 
-<ul *ngFor="let operation of operations">
+<ul *ngFor="let operation of operations?.features">
 
-	<li> {{operation.id_operation}} </li>
+	<li>
 
-	<li *ngIf="operation.id_nomenclature_cmr_action">
-		<pnx-cmr-nomenclature-display
-		[id_nomenclature]="operation.id_nomenclature_cmr_action" >
-	</pnx-cmr-nomenclature-display>
-</li>
-<!-- disabled="true" -->
+		<ul>
 
-<!-- {{ operationsForm.value | json }} -->
+			<li> Id opération : {{operation.properties.id_operation}} </li>
+
+			<li *ngIf="operation.properties.id_nomenclature_cmr_action">
+				Action : <pnx-cmr-nomenclature-display
+				[id_nomenclature]="operation.properties.id_nomenclature_cmr_action" >
+			</pnx-cmr-nomenclature-display>
+			</li>
+
+			<li *ngIf="operation.properties.id_nomenclature_obs_method">
+				Méthode : <pnx-cmr-nomenclature-display
+				[id_nomenclature]="operation.properties.id_nomenclature_obs_method" >
+			</pnx-cmr-nomenclature-display>
+			</li>
+
+			<li *ngIf="operation.properties.id_nomenclature_life_stage">
+				Stade de vie : <pnx-cmr-nomenclature-display
+				[id_nomenclature]="operation.properties.id_nomenclature_life_stage" >
+			</pnx-cmr-nomenclature-display>
+			</li>
+
+			<li *ngIf="operation.properties.id_nomenclature_bio_condition">
+				Etat biologique : <pnx-cmr-nomenclature-display
+				[id_nomenclature]="operation.properties.id_nomenclature_bio_condition" >
+			</pnx-cmr-nomenclature-display>
+			</li>
+
+			<li *ngIf="operation.properties.id_nomenclature_determination_method">
+				Détermination : <pnx-cmr-nomenclature-display
+				[id_nomenclature]="operation.properties.id_nomenclature_determination_method" >
+			</pnx-cmr-nomenclature-display>
+			</li>
+
+		</ul>
+
+	</li>
 
 </ul>
+
+<div>
+	<h3>Ajout d'une nouvelle opération</h3>
+
+	<pnx-nomenclature label="Action"
+		[parentFormControl]="operationsForm.controls.id_nomenclature_cmr_action"
+		codeNomenclatureType="CMR_ACTION"
+		>
+	</pnx-nomenclature>
+
+<pnx-nomenclature label="Méthode d'observation"
+		[parentFormControl]="operationsForm.controls.id_nomenclature_obs_method"
+		codeNomenclatureType="METH_OBS"
+		>
+	</pnx-nomenclature>
+
+ <pnx-nomenclature label="Stade de vie"
+		[parentFormControl]="operationsForm.controls.id_nomenclature_life_stage"
+		codeNomenclatureType="STADE_VIE"
+		>
+	</pnx-nomenclature>
+
+<pnx-nomenclature label="État biolgique"
+		[parentFormControl]="operationsForm.controls.id_nomenclature_bio_condition"
+		codeNomenclatureType="ETA_BIO"
+		>
+	</pnx-nomenclature>
+
+<pnx-nomenclature label="Méthode de détermination"
+		[parentFormControl]="operationsForm.controls.id_nomenclature_determination_method"
+		codeNomenclatureType="METH_DETERMIN"
+		>
+	</pnx-nomenclature>
+<!--
+ -->
+</div>
+
+<!-- {{ operationsForm.value | json }} -->
 
 
 <!-- 		<pnx-nomenclature label="Action"

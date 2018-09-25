@@ -2,6 +2,7 @@ import uuid
 
 from flask import Blueprint, request
 from geoalchemy2.shape import from_shape
+from geojson import FeatureCollection
 from pypnusershub import routes as fnauth
 from shapely.geometry import Point, asShape
 
@@ -82,7 +83,7 @@ def post_programs(id_program = None):
 @json_resp
 def get_operations():
     operations = DB.session.query(TOperations).all()
-    result = [ope.as_dict() for ope in operations]
+    result = FeatureCollection([ope.get_geofeature() for ope in operations])
     return result
 
 
@@ -90,8 +91,8 @@ def get_operations():
 @json_resp
 def get_operation(id_ope):
     operation = TOperations.query.get(id_ope)
-    result = operation.as_dict()
-    return result
+    # result = operation.as_dict()
+    return operation.get_geofeature()
 
 
 @blueprint.route('/operations', methods=['POST'])
@@ -140,7 +141,8 @@ def post_operations(info_role):
     DB.session.add(newoperation)
     DB.session.commit()
     DB.session.flush()
-    return newoperation.as_geofeature('geom_point_4326', 'id_operation')
+
+    return newoperation.get_geofeature()
 
 
 @blueprint.route('/nomenclature_display/<int:id_nomenclature>', methods=['GET'])
