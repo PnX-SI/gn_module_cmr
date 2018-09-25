@@ -17,17 +17,22 @@ export class OperationsComponent implements OnInit {
   ngOnInit() {
 
     this.operationsForm = this.formbuilder.group(
-      {'id_nomenclature_cmr_action': [ null, Validators.required]},
+      {'id_nomenclature_cmr_action': [ null, Validators.required],
+      'id_nomenclature_obs_method': [ null, Validators.required],
+      'id_nomenclature_life_stage': [ null, Validators.required],
+      'id_nomenclature_bio_condition': [ null, Validators.required],
+      'id_nomenclature_determination_method': [ null, Validators.required]
 
-      );
+    },
+
+    );
 
     this._api.get<any>(`${AppConfig.API_ENDPOINT}/cmr/operations`)
-      .subscribe(data => {
-        this.operations = data;
-        this.operationsForm.patchValue(this.operations[0])
+    .subscribe(data => {
+      this.operations = data;
+        // this.operationsForm.patchValue(this.operations[0])
         console.log(data);
       })
-
 
     console.log(this.operationsForm);
   }
