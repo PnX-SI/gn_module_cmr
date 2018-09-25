@@ -34,3 +34,18 @@ class TIndividuals(DB.Model):
         DB.Integer,
         ForeignKey('ref_nomenclatures.t_nomenclatures.id_nomenclature')
     )
+
+@serializable
+class Taxonomie(DB.Model):
+    __tablename__ = 'taxref'
+    __table_args__ = {
+        'schema': 'taxonomie',
+        'extend_existing': True
+    }
+
+    cd_nom = DB.Column(
+        DB.Integer,
+        primary_key=True
+    )
+    nom_complet = DB.Column(DB.Unicode)
+    nom_vern = DB.Column(DB.Unicode)
