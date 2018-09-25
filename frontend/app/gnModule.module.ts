@@ -3,12 +3,16 @@ import { CommonModule } from '@angular/common';
 import { GN2CommonModule } from "@geonature_common/GN2Common.module";
 import { Routes, RouterModule } from "@angular/router";
 import { ProgramsComponent } from "./components/programs.component";
+import { OperationsComponent } from "./components/operations.component";
 
 // my module routing
-const routes: Routes = [{ path: "", component: ProgramsComponent }];
+const routes: Routes = [
+{ path: "", component: ProgramsComponent },
+{ path: "operations", component: OperationsComponent },
+];
 
 @NgModule({
-  declarations: [ProgramsComponent],
+  declarations: [ProgramsComponent, OperationsComponent],
   imports: [GN2CommonModule, RouterModule.forChild(routes), CommonModule],
   providers: [],
   bootstrap: []
