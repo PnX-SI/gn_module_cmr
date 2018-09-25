@@ -16,8 +16,9 @@ export class OperationsComponent implements OnInit {
 
   ngOnInit() {
 
-    this.operationsForm = this.formbuilder.group(
-      {'id_nomenclature_cmr_action': [ null, Validators.required],
+    this.operationsForm = this.formbuilder.group({
+
+      'id_nomenclature_cmr_action': [ null, Validators.required],
       'id_nomenclature_obs_method': [ null, Validators.required],
       'id_nomenclature_life_stage': [ null, Validators.required],
       'id_nomenclature_bio_condition': [ null, Validators.required],
