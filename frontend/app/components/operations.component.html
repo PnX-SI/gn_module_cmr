@@ -1,0 +1,23 @@
+<h3> It works !</h3>
+
+<ul *ngFor="let operation of operations">
+
+	<li> {{operation.id_operation}} </li>
+
+	<li *ngIf="operation.id_nomenclature_cmr_action">
+		<pnx-cmr-nomenclature-display
+		[id_nomenclature]="operation.id_nomenclature_cmr_action" >
+	</pnx-cmr-nomenclature-display>
+</li>
+<!-- disabled="true" -->
+
+<!-- {{ operationsForm.value | json }} -->
+
+</ul>
+
+
+<!-- 		<pnx-nomenclature label="Action"
+		[parentFormControl]="operationsForm.controls.id_nomenclature_cmr_action"
+		codeNomenclatureType="CMR_ACTION"
+		>
+	</pnx-nomenclature> -->
