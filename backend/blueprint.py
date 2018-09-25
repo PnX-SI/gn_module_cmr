@@ -5,6 +5,8 @@ from geonature.utils.env import DB, get_module_id
 from geonature.utils.errors import GeonatureApiError
 from geonature.utils.utilssqlalchemy import json_resp
 from .models import TPrograms, TOperations
+from geoalchemy2.shape import from_shape
+from shapely.geometry import Point, asShape
 
 blueprint = Blueprint('cmr', __name__)
 
@@ -12,6 +14,7 @@ try:
     ID_MODULE = get_module_id('cmr')
 except Exception as e:
     ID_MODULE = 'Error'
+
 
 @blueprint.route('/test', methods=['GET', 'POST'])
 def test():
@@ -26,7 +29,7 @@ def get_programs():
 
 
 @blueprint.route('/programs', methods=['POST'])
-@fnauth.check_auth_cruved('R', False, id_app=ID_MODULE)
+@fnauth.check_auth_cruved('C', False, id_app=ID_MODULE)
 @json_resp
 def post_programs():
     """ Ajout d'un programme (program name unique)"""
@@ -49,9 +52,56 @@ def post_programs():
     DB.session.flush()
     return newprog.as_dict()
 
+
 @blueprint.route('/operations', methods=['GET'])
 @json_resp
 def get_operations():
     operations = DB.session.query(TOperations).all()
     result = [ope.as_dict() for ope in operations]
     return result
+
+@blueprint.route('/operations/<int:id_ope>', methods=['GET'])
+@json_resp
+def get_operation(id_ope):
+    operation = TOperations.query.get(id_ope)
+    result = operation.as_dict()
+    return result
+
+
+
+@blueprint.route('/operations', methods=['POST'])
+@fnauth.check_auth_cruved('C', True, id_app=ID_MODULE)
+@json_resp
+def post_operations(info_role):
+    data = dict(request.get_json())
+    if 'geometry' in data:
+        geometry = data['geometry']
+        data.pop('geometry')
+
+    try:
+        id_individual = data['id_individual']
+        try:
+            ind_exists = DB.session.query(DB.exists().where(TIndividuals.id_individual == id_individual)).scalar()
+        except:
+            ind_exists = True
+        if ind_exists:
+            try:
+                newoperation = TOperations(**data)
+            except:
+                raise GeonatureApiError('Cannot create operation')
+        else:
+            raise GeonatureApiError("Individual doesn't exists")
+    except:
+        raise GeonatureApiError("id_individual missing")
+
+    if geometry:
+        try:
+            shape = asShape(data['geometry'])
+            newoperation.geom_point_4326 = from_shape(Point(shape), srid=4326)
+        except:
+            geom = None
+
+    DB.session.add(newoperation)
+    DB.session.commit()
+    DB.session.flush()
+    return newoperation.as_dict()
