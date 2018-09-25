@@ -11,6 +11,10 @@ from geonature.utils.utilssqlalchemy import json_resp
 from .models import TPrograms, TOperations
 from geojson import FeatureCollection
 
+from pypnnomenclature.models import TNomenclatures
+
+
+
 blueprint = Blueprint('cmr', __name__)
 
 try:
@@ -118,5 +122,21 @@ def post_operations(info_role):
     DB.session.add(newoperation)
     DB.session.commit()
     DB.session.flush()
+<<<<<<< HEAD
 
     return newoperation.get_geofeature()
+=======
+    return newoperation.as_geofeature('geom_point_4326', 'id_operation')
+
+
+@blueprint.route('/nomenclature_display/<int:id_nomenclature>', methods=['GET'])
+@json_resp
+def get_nomenclature_label(id_nomenclature):
+
+    try:
+        data = DB.session.query(TNomenclatures).filter(TNomenclatures.id_nomenclature == id_nomenclature).first()
+    except:
+        raise GeonatureApiError("Erreur id_nomenclature")
+
+    return data.as_dict()
+>>>>>>> 01c5377557b8cd5629691d48b2160d86c1296288
