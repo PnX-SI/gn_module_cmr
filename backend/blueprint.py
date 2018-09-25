@@ -95,6 +95,8 @@ def get_operation(id_ope):
     return operation.get_geofeature()
 
 
+
+
 @blueprint.route('/operations', methods=['POST'])
 @fnauth.check_auth_cruved('C', True, id_app=ID_MODULE)
 @json_resp
@@ -180,3 +182,14 @@ def get_individuals(id_individual=None):
         res = ind.as_dict()
         res.update({'nom_complet': nom_complet, 'nom_vern': nom_vern, 'sexe': sex})
     return res
+
+@blueprint.route('/individuals/operations/<int:id_indiv>', methods=['GET'])
+@json_resp
+def get_operations_by_individual(id_indiv):
+    """Récupération de toutes les opérations réalisées sur un individu"""
+    try:
+        datas = TOperations.query.filter(TOperations.id_individual == id_indiv).all()
+        operations = FeatureCollection([ope.get_geofeature() for ope in datas])
+        return operations
+    except Exception as e:
+        raise GeonatureApiError(e)
