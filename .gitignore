@@ -112,3 +112,4 @@ venv.bak/
 # Pycharm
 .idea/
 
+conf_gn_module.toml

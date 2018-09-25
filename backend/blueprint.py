@@ -1,3 +1,4 @@
+from flask import Blueprint, request
 import uuid
 
 from flask import Blueprint, request
@@ -10,16 +11,12 @@ from shapely.geometry import Point, asShape
 from geonature.utils.errors import GeonatureApiError
 from geonature.utils.env import DB, get_module_id
 from geonature.utils.utilssqlalchemy import json_resp
-<<<<<<< HEAD
-from .models import TPrograms, TOperations, TIndividuals, Taxonomie
+from geonature.core.gn_monitoring.models import TBaseSites
+from .models import TPrograms, TOperations, TIndividuals, Taxonomie, CorSiteProgram
+from geojson import FeatureCollection
 
 from pypnnomenclature.models import TNomenclatures
 
-=======
-from geonature.core.gn_monitoring.models import TBaseSites
-from .models import TPrograms, CorSiteProgram
-from geojson import FeatureCollection
->>>>>>> sites
 
 blueprint = Blueprint('cmr', __name__)
 
@@ -198,3 +195,12 @@ def get_sites(id_program):
     for site in sites:
         features.append(site.get_geofeature(recursif=False))
     return FeatureCollection(features)
+
+
+@blueprint.route('/individuals', methods=['POST'])
+@json_resp
+def create_individual():
+    ind = TIndividuals(**request.get_json())
+    DB.session.add(ind)
+    DB.session.commit()
+    return ind.ad_dict()
