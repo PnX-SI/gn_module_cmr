@@ -1,0 +1,34 @@
+<div class=" row row-0 center">
+    <div class="col-xs-12 col-sm-12 col-md-8 col-lg-6 padding-sm">
+  
+      <div class="card ">
+        <div class="card-body">
+          <h3>
+            Programe
+          </h3>
+  
+  
+          <small>Nom </small>
+          <div class="input-group ">
+            <input [ngClass]="{'is-invalid' : pgForm.controls.program_name.invalid}" class="form-control form-control-sm"
+              type="text" name="" id="" [formControl]="pgForm.controls.program_name">
+          </div>
+  
+          <small>Description</small>
+          <div class="input-group">
+            <input [ngClass]="{'is-invalid' : pgForm.controls.program_desc.invalid}" class="form-control form-control-sm"
+              type="text" name="" id="" [formControl]="pgForm.controls.program_desc">
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+  
+<button
+    [disabled]="pgForm.invalid"
+    class="btn btn-success margin-top-sm center" 
+    (click)="postPg()"
+>
+    Enregistrer le programe
+</button>
+  
